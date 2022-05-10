@@ -34,4 +34,17 @@ a_dec_max_3 =  1/m * b/(1 + g(3) * gamma) * umin - 1/m * c * vmax^2;
 a_dec_max = min([a_dec_max_1, a_dec_max_2, a_dec_max_3]);
 
 %% step 2.2
+% by using maple, optimal alpha, beta are: alpha=29.7353, beta=265.2573
+
+%% step 2.3
+
+step_3.model_original = 
+
+test_t = 10;
+test_sin_input = sin()
+
+
+%% step 2.4
+
+%% step 2.5
 
