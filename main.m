@@ -84,7 +84,18 @@ title("step 3 simulation speed")
 
 %% step 2.4
 
+% See in .mw file
 
+% for driving force part
+% f1 = @(v,u) 1/m * b/(1 + gamma) * u;
+% f2 = @(v,u) 1/m * b/(1 + 2 * gamma) * u;
+% f3 = @(v,u) 1/m * b/(1 + 3 * gamma) * u;
+% 
+% % for friction part
+% g1 = @(v) beta/alpha * v;
+% g2 = @(v) 1/m * (c * vmax^2 - beta)/(vmax - alpha) * (v - vmax) + c * vmax^2;
+% 
+% f11 = f1 + 0.15 * f1
 
 
 %% step 2.5
