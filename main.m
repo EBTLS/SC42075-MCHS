@@ -4,6 +4,9 @@
 %%% Author: Jiaxuan Zhang, Yiting Li
 %%%%%
 
+clear all
+close all
+
 %% Global Parameters
 m = 800;
 c = 0.4;
@@ -33,6 +36,7 @@ a_dec_max_3 =  1/m * b/(1 + g(3) * gamma) * umin - 1/m * c * vmax^2;
 % maixmum deacceleartion is -3.5368 m/s^2
 a_dec_max = min([a_dec_max_1, a_dec_max_2, a_dec_max_3]);
 
+clear a_dec_max_1 a_dec_max_2 a_dec_max_3
 %% step 2.2
 % model with two-point format 
 % by using maple, optimal alpha, beta are: alpha=29.7353, beta=265.2573
@@ -59,10 +63,10 @@ step_3.pwa_simulation.y = temp_y;
 % plot the result
 figure
 % position result
-subplot(1,2,1)
-plot(step_3.original_simulation.t, step_3.original_simulation.y(:,1),'r');
+subplot(1, 2, 1)
+plot(step_3.original_simulation.t, step_3.original_simulation.y(:,1), 'r');
 hold on
-plot(step_3.pwa_simulation.t, step_3.pwa_simulation.y(:,1),'b');
+plot(step_3.pwa_simulation.t, step_3.pwa_simulation.y(:,1), 'b');
 grid on
 legend('original function', 'pwa function')
 xlabel('t')
@@ -70,10 +74,10 @@ ylabel('position')
 title("step 3 simulation position")
 
 % speed result
-subplot(1,2,2)
-plot(step_3.original_simulation.t,step_3.original_simulation.y(:,2),'r');
+subplot(1, 2, 2)
+plot(step_3.original_simulation.t, step_3.original_simulation.y(:,2), 'r');
 hold on
-plot(step_3.pwa_simulation.t, step_3.pwa_simulation.y(:,2),'b');
+plot(step_3.pwa_simulation.t, step_3.pwa_simulation.y(:,2), 'b');
 grid on
 legend('original function', 'pwa function')
 xlabel('t')
