@@ -11,4 +11,3 @@ function [outputArg1, outputArg2] = Solution_2_7(k, Np, Nc, lambda)
 outputArg1 = inputArg1;
 outputArg2 = inputArg2;
 end
-
