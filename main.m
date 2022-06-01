@@ -14,17 +14,17 @@ b = 3700;
 umax = 1.3;
 umin = -1.3;
 a_comf_max = 2.5;
-gamma = 0.8;
+gamma = 0.87;
 v12 = 15;
 v23 = 30;
 
 g = [1,2,3];
 
 %% Step 2.1
-% maximum speed: 59.4707 m/s;
+% maximum speed: 57.7150 m/s;
 vmax = sqrt(1/c * b / (1 + g(3) * gamma) * umax);
 
-% maximum accelerationg 3.3403 m/s^2
+% maximum accelerationg 3.2152 m/s^2
 a_acc_max = 1/m * b/(1 + g(1) * gamma) * umax - 0; 
 % maximum deacceleration
 % for state 1 (-3.4528 m/s^2), however, it is a limit number and cannot actually be achieved
@@ -33,20 +33,20 @@ a_dec_max_1 =  1/m * b/(1 + g(1) * gamma) * umin - 1/m * c * v12^2;
 a_dec_max_2 =  1/m * b/(1 + g(2) * gamma) * umin - 1/m * c * v23^2;
 % for state 3 (-3.5368 m/s^2), however, it is a limit number and cannot actually be achieved 
 a_dec_max_3 =  1/m * b/(1 + g(3) * gamma) * umin - 1/m * c * vmax^2;
-% maixmum deacceleartion is -3.5368 m/s^2
+% maixmum deacceleartion is -3.3310 m/s^2
 a_dec_max = min([a_dec_max_1, a_dec_max_2, a_dec_max_3]);
 
 clear a_dec_max_1 a_dec_max_2 a_dec_max_3
 %% step 2.2
 % model with two-point format 
-% by using maple, optimal alpha, beta are: alpha=29.7353, beta=265.2573
-alpha = 29.7353;
-beta = 265.2573;
+% by using maple, optimal alpha, beta are: alpha=28.8575, beta=249.8266
+alpha = 28.8575;
+beta = 249.8266;
 
 %% step 2.3
 
 test_t = 5;
-step_3.y0 = [0;1];
+step_3.y0 = [0;10];
 
 % original function simulation
 [temp_t, temp_y] = ode45(@(t,y) dydt_step3(t,y,0,alpha,beta,m,gamma,b,c,vmax),...
