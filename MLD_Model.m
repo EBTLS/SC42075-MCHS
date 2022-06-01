@@ -1,3 +1,7 @@
+clear
+clc
+close all
+
 
 %% Define Variables
 %  basic variables
@@ -39,9 +43,9 @@ f = expand(f_original);
 % d1d2 -> d5
 % d2d3 -> d6
 % d3d4 -> d7
-f = subs(f,d1*d2,d5);
-f = subs(f,d2*d3,d6);
-f = subs(f,d3*d4,d7);
+f = subs(f,d1*d2, d5);
+f = subs(f,d2*d3, d6);
+f = subs(f,d3*d4, d7);
 
 
 % subs binary variables * real-value variables
