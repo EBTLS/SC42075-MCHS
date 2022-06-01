@@ -1,4 +1,4 @@
-function [outputArg1,outputArg2] = Solution_2_7(k, Np, Nc, lambda)
+function [outputArg1, outputArg2] = Solution_2_7(k, Np, Nc, lambda)
 %Solution_2_7 Solution file for question 2.7
 %   Detailed explanation goes here
 % Input:
