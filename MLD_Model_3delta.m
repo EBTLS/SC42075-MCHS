@@ -14,6 +14,8 @@ f4 = 1.2812*u - 0.0469*v + 1.0409 + v;
 % some known parameters
 vmax = 57.7150;
 vmin = 0;
+umax = 1.3;
+umin = -1.3;
 v1 = 15;
 v2 = 28.8575;
 v3 = 30;
@@ -22,16 +24,16 @@ m = vmin;
 M = vmax;
 
 % binary auxiliary variables
-% d1 <-> v <= v1
-% d2 <-> v <= v2
-% d3 <-> v <= v3
+% d1 -> v <= v1
+% d2 -> v <= v2
+% d3 -> v <= v3
 syms d1 d2 d3
 
 % auxiliary real-value variables
 syms z1 z2 z3
 
 % machine precision value
-epsilon = 0.001;
+epsilon = 0.0001;
 
 % Discrete Time Step
 T = 0.15;
@@ -68,7 +70,7 @@ pretty(f);
 % Convert to standard MLD
 MLD.A1 = 9531/10000;
 MLD.B1 = 3203/2500;
-MLD.B2 = [0, 10409/10000, 0];
+MLD.B2 = [0, - 10409/10000, 0];
 MLD.B3 = [7853/10000, 361/10000, 1017/2500];
 MLD.constant = 10409/10000;
 
@@ -110,13 +112,13 @@ pretty(g);
 % z variables constraints
 % d1*u -> z1
 g = [];
-temp_g = z1 <= M * d1;
+temp_g = z1 <= umax * d1;
 g = [g;temp_g];
-temp_g = z1 >= m * d1;
+temp_g = z1 >= umin * d1;
 g = [g;temp_g];
-temp_g = z1 <= u - m * (1 - d1);
+temp_g = z1 <= u - umin * (1 - d1);
 g = [g;temp_g];
-temp_g = z1 >= u - M * (1 - d1);
+temp_g = z1 >= u - umax * (1 - d1);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d1*u -> z1\n");
@@ -138,13 +140,13 @@ pretty(g);
 
 % d3*u -> z3
 g = [];
-temp_g = z3 <= M * d3;
+temp_g = z3 <= umax * d3;
 g = [g;temp_g];
-temp_g = z3 >= m * d3;
+temp_g = z3 >= umin * d3;
 g = [g;temp_g];
-temp_g = z3 <= u - m * (1 - d3);
+temp_g = z3 <= u - umin * (1 - d3);
 g = [g;temp_g];
-temp_g = z3 >= u - M * (1 - d3);
+temp_g = z3 >= u - umax * (1 - d3);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d3*u -> z3\n");
@@ -169,12 +171,15 @@ clear g temp_g
 % There are total n = 20 constraint
 
 %% change to standard MLD constraints
+
+ng = nd * 2 + nz * 4;
+
 % E1*v + E2*u + E3*d + E4*z <= g5
-MLD.E1 = zeros(n, nv);
-MLD.E2 = zeros(n, nu);
-MLD.E3 = zeros(n, nd);
-MLD.E4 = zeros(n, nz);
-MLD.g5 = zeros(n, 1);
+MLD.E1 = zeros(ng, nv);
+MLD.E2 = zeros(ng, nu);
+MLD.E3 = zeros(ng, nd);
+MLD.E4 = zeros(ng, nz);
+MLD.g5 = zeros(ng, 1);
 
 % define E1, v
 MLD.E1(1) = 1;
@@ -185,34 +190,36 @@ MLD.E1(5) = 1;
 MLD.E1(6) = -1;
 MLD.E1(13) = -1;
 MLD.E1(14) = 1;
-MLD.E1(19) = -1;
-MLD.E1(20) = 1;
 
 % define E2, u
 MLD.E2(9) = -1;
 MLD.E2(10) = 1;
-MLD.E2(17) = -1;
-MLD.E2(18) = 1;
+MLD.E1(17) = -1;
+MLD.E1(18) = 1;
 
 % define E3, [d1 d2 d3]
 % d1
 MLD.E3(1, 1) = 11543/200;
-MLD.E3(2, 1) = -1/1000;
+MLD.E3(2, 1) = -1/10000;
 % d2
 MLD.E3(3, 2) = 11543/200;
-MLD.E3(4, 2) = -1/1000;
+MLD.E3(4, 2) = -1/10000;
 % d3
 MLD.E3(5, 3) = 11543/200;
-MLD.E3(6, 3) = -1/1000;
+MLD.E3(6, 3) = -1/10000;
 % d1*u -> z1
-MLD.E3(7, 1) = -11543/200;
-MLD.E3(10, 1) = 11543/200;
+MLD.E3(7, 1) = -13/10;
+MLD.E3(8, 1) = -13/10;
+MLD.E3(9, 1) = 13/10;
+MLD.E3(10, 1) = 13/10;
 % d2*v -> z2
 MLD.E3(11, 2) = -11543/200;
 MLD.E3(14, 2) = 11543/200;
 % d3*u -> z3
-MLD.E3(15, 3) = -11543/200;
-MLD.E3(18, 3) = 11543/200;
+MLD.E3(15, 3) = -13/10;
+MLD.E3(16, 3) = -13/10;
+MLD.E3(17, 3) = 13/10;
+MLD.E3(18, 3) = 13/10;
 
 % define E4, [z1 z2 z3]
 % d1*u -> z1
@@ -251,19 +258,21 @@ MLD.E4(18, 3) = -1;
 % define g5, constant
 % d1
 MLD.g5(1) = 15 + 11543/200;
-MLD.g5(2) = - 1/1000 - 15;
+MLD.g5(2) = - 1/10000 - 15;
 % d2
-MLD.g5(3) = -11543/400 - 11543/200;
-MLD.g5(4) = 1/1000 + 11543/400;
+MLD.g5(3) = 11543/400 + 11543/200;
+MLD.g5(4) = -1/10000 - 11543/400;
 % d3
 MLD.g5(5) = 30 + 11543/200;
-MLD.g5(6) = - 1/1000 - 30;
+MLD.g5(6) = - 1/10000 - 30;
 % d1*u -> z1
-MLD.g5(10) = 11543/200;
+MLD.g5(9) = 13/10;
+MLD.g5(10) = 13/10;
 % d2*v -> z2
 MLD.g5(14) = 11543/200;
 % d3*u -> z3
-MLD.g5(18) = 11543/200;
+MLD.g5(17) = 13/10;
+MLD.g5(18) = 13/10;
 
 model = MLD;
 
