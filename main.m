@@ -13,6 +13,7 @@ c = 0.4;
 b = 3700;
 umax = 1.3;
 umin = -1.3;
+vmin = 0;
 a_comf_max = 2.5;
 gamma = 0.87;
 v12 = 15;
@@ -102,5 +103,22 @@ title("step 3 simulation speed")
 % f11 = f1 + 0.15 * f1
 
 
-%% step 2.5
+%% step 2.6
+
+model = MLD_Model_3delta()
+
+
+%% step 2.7
+lambda = 0.1;
+Np = 2;
+Nc = 2;
+x_0 = [0];
+d_0 = [1; 1; 1];
+z_0 = [0; 0; 0];
+u_0 = 0;
+Ts = 0.15;
+x_ref = [20; 20];
+
+[flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                x_0, d_0, z_0, u_0, model, Ts, x_ref )
 
