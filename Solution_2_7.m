@@ -1,4 +1,4 @@
-function [flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, d_0, z_0, u_0, model, Ts, x_ref)
+function [flag,x,u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, d_0, z_0, u_0, model, Ts, x_ref)
 %Solution_2_7 Solution file for question 2.7
 %   Detailed explanation goes here
 % Input:
@@ -33,7 +33,7 @@ c2 = zeros(1, nx*Np); % for u
 c3 = zeros(1, nd*Np); % for delta
 c4 = zeros(1, nz*Np); % for z
 c5 = ones(1,Np); % for rho
-c6 = 1; % for tau
+c6 = lambda; % for tau
 
 c = [c1, c2, c3, c4, c5, c6];
 
@@ -50,7 +50,7 @@ A11 = eye(Np) + A11;
 aux_matrix = diag(ones(1, Np), 0);
 A12 = -kron(aux_matrix, model.B1);
 
-aux_matrix = diag(ones(1,Np-1), -1);
+aux_matrix = diag(ones(1,Np-1),-1);
 A13 = -kron(aux_matrix, model.B2);
 
 A14 = -kron(aux_matrix, model.B3);
@@ -66,6 +66,7 @@ aux_matrix = diag(ones(1, Np), 0);
 A21 = kron(aux_matrix, model.E1);
 
 aux_matrix = diag(ones(1, Np-1), 1);
+aux_matrix(end,end) = 1;
 A22 = kron(aux_matrix, model.E2);
 
 aux_matrix = diag(ones(1, Np), 0);
@@ -217,9 +218,9 @@ ub3 = 1 * ones(Np*nd, 1);
 % z ub
 aux_matrix = ones(Np,1);
 ub4 = kron(aux_matrix, [umax; vmax; umax]);
-% rho ub
+% rho lb
 ub5 = +Inf * ones(Np, 1);
-% tau ub
+% tau lb
 ub6 = +Inf * ones(1);
 
 % combine the ub and lb
@@ -230,7 +231,7 @@ ub = [ub1; ub2; ub3; ub4; ub5; ub6];
 %% prepare solver parameter
 
 % constraints characters
-ctype =repelem(['S','U','U','L','U','L','U','L','S'],...
+ctype =repelem(['S','U', 'U','L','U','L','U','L','S'],...
                [nx*Np, ng*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
 
 % ctype =repelem(['S','U','L','U','L','U','L','S'],...
@@ -253,7 +254,7 @@ param.lpsolver = 2;
 
 if flag == -1
    
-    fprintf("flag == -1");;
+    ;
     
 else
 
