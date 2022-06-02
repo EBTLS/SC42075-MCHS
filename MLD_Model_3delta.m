@@ -1,6 +1,5 @@
-% clear
-% clc
-% close all
+function model = MLD_Model_3delta()
+%MLD_Model_3delta Output an MLD model with 3 delta variables
 
 %% Define Variables
 %  basic variables
@@ -15,8 +14,6 @@ f4 = 1.2812*u - 0.0469*v + 1.0409 + v;
 % some known parameters
 vmax = 57.7150;
 vmin = 0;
-umax = 1.3;
-umin = -1.3;
 v1 = 15;
 v2 = 28.8575;
 v3 = 30;
@@ -25,9 +22,9 @@ m = vmin;
 M = vmax;
 
 % binary auxiliary variables
-% d1 -> v <= v1
-% d2 -> v <= v2
-% d3 -> v <= v3
+% d1 <-> v <= v1
+% d2 <-> v <= v2
+% d3 <-> v <= v3
 syms d1 d2 d3
 
 % auxiliary real-value variables
@@ -69,7 +66,7 @@ pretty(f);
 %  2500      10000     10000    10000     10000     2500    10000
 
 % Convert to standard MLD
-MLD.A = 9531/10000;
+MLD.A1 = 9531/10000;
 MLD.B1 = 3203/2500;
 MLD.B2 = [0, 10409/10000, 0];
 MLD.B3 = [7853/10000, 361/10000, 1017/2500];
@@ -113,13 +110,13 @@ pretty(g);
 % z variables constraints
 % d1*u -> z1
 g = [];
-temp_g = z1 <= umax * d1;
+temp_g = z1 <= M * d1;
 g = [g;temp_g];
-temp_g = z1 >= umin * d1;
+temp_g = z1 >= m * d1;
 g = [g;temp_g];
-temp_g = z1 <= u - umin * (1 - d1);
+temp_g = z1 <= u - m * (1 - d1);
 g = [g;temp_g];
-temp_g = z1 >= u - umax * (1 - d1);
+temp_g = z1 >= u - M * (1 - d1);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d1*u -> z1\n");
@@ -141,13 +138,13 @@ pretty(g);
 
 % d3*u -> z3
 g = [];
-temp_g = z3 <= umax * d3;
+temp_g = z3 <= M * d3;
 g = [g;temp_g];
-temp_g = z3 >= umin * d3;
+temp_g = z3 >= m * d3;
 g = [g;temp_g];
-temp_g = z3 <= u - umin * (1 - d3);
+temp_g = z3 <= u - m * (1 - d3);
 g = [g;temp_g];
-temp_g = z3 >= u - umax * (1 - d3);
+temp_g = z3 >= u - M * (1 - d3);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d3*u -> z3\n");
@@ -234,25 +231,41 @@ MLD.E4(16, 3) = -1;
 MLD.E4(17, 3) = 1;
 MLD.E4(18, 3) = -1;
 
+% % define g5, constant
+% % d1
+% MLD.g5(1) = -15 - 11543/200;
+% MLD.g5(2) = 1/1000 + 15;
+% % d2
+% MLD.g5(3) = -11543/400 - 11543/200;
+% MLD.g5(4) = 1/1000 + 11543/400;
+% % d3
+% MLD.g5(5) = -30 - 11543/200;
+% MLD.g5(6) = 1/1000 + 30;
+% % d1*u -> z1
+% MLD.g5(10) = -11543/200;
+% % d2*v -> z2
+% MLD.g5(14) = -11543/200;
+% % d3*u -> z3
+% MLD.g5(18) = -11543/200;
+
 % define g5, constant
 % d1
-MLD.g5(1) = -15 - 11543/200;
-MLD.g5(2) = 1/1000 + 15;
+MLD.g5(1) = 15 + 11543/200;
+MLD.g5(2) = - 1/1000 - 15;
 % d2
 MLD.g5(3) = -11543/400 - 11543/200;
 MLD.g5(4) = 1/1000 + 11543/400;
 % d3
-MLD.g5(5) = -30 - 11543/200;
-MLD.g5(6) = 1/1000 + 30;
+MLD.g5(5) = 30 + 11543/200;
+MLD.g5(6) = - 1/1000 - 30;
 % d1*u -> z1
-MLD.g5(10) = -11543/200;
+MLD.g5(10) = 11543/200;
 % d2*v -> z2
-MLD.g5(14) = -11543/200;
+MLD.g5(14) = 11543/200;
 % d3*u -> z3
-MLD.g5(18) = -11543/200;
+MLD.g5(18) = 11543/200;
 
-% MLD.E1
-% MLD.E2
-% MLD.E3
-% MLD.E4
-% MLD.E5
+model = MLD;
+
+end
+
