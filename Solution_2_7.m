@@ -58,8 +58,8 @@ A15 = zeros(Np,Np);
 A16 = zeros(Np,1);
 
 A1 = [A11, A12, A13, A14, A15, A16];
-b1 = zeros(Np,1);
-b1(1) = model.A1 * x_0 + model.B2 * d_0 + model.B3 * z_0;
+b1 = ones(Np,1) * model.constant;
+b1(1) = b1(1) + model.A1 * x_0 + model.B2 * d_0 + model.B3 * z_0;
 
 % original inequalities
 aux_matrix = diag(ones(1, Np), 0);
@@ -188,8 +188,8 @@ flag = 0 ;
 % A = [A1; A2; A3; A4; A5; A6; A7; A8; A9];
 % b = [b1; b2; b3; b4; b5; b6; b7; b8; b9];
 
-A = [A1; A2;];
-b = [b1; b2;];
+A = [A1; A3; A4; A5; A6; A7; A8; A9];
+b = [b1; b3; b4; b5; b6; b7; b8; b9];
 
 
 %% prepare lb and ub
@@ -233,13 +233,11 @@ ub = [ub1; ub2; ub3; ub4; ub5; ub6];
 % ctype =repelem(['S','U','U','L','U','L','U','L','S'],...
 %                [nx*Np, ng*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
 
-ctype =repelem(['S','U'],...
-               [nx*Np, ng*Np]);
+ctype =repelem(['S','U','L','U','L','U','L','S'],...
+               [nx*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
 
 
 % types of the variables
-% vartype = repelem(['C','C','B','C','C','C'], ...
-%                  [nx*Np, nu*Np, nd*Np, nz*Np, Np, 1]);
 vartype = repelem(['C','C','B','C','C','C'], ...
                  [nx*Np, nu*Np, nd*Np, nz*Np, Np, 1]);
 
