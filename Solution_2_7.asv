@@ -33,7 +33,7 @@ c2 = zeros(1, nx*Np); % for u
 c3 = zeros(1, nd*Np); % for delta
 c4 = zeros(1, nz*Np); % for z
 c5 = ones(1,Np); % for rho
-c6 = lambda; % for tau
+c6 = 1; % for tau
 
 c = [c1, c2, c3, c4, c5, c6];
 
@@ -66,7 +66,6 @@ aux_matrix = diag(ones(1, Np), 0);
 A21 = kron(aux_matrix, model.E1);
 
 aux_matrix = diag(ones(1, Np-1), 1);
-aux_matrix(end,end) = 1;
 A22 = kron(aux_matrix, model.E2);
 
 aux_matrix = diag(ones(1, Np), 0);
@@ -79,6 +78,7 @@ A26 = zeros(ng*Np,1);
 A2 = [A21, A22, A23, A24, A25, A26];
 b2 = ones(Np,1);
 b2 = kron(b2, model.g5);
+b2 ([(Np-1) * nd: 1:])
 
 
 % optimization  construction
@@ -231,7 +231,7 @@ ub = [ub1; ub2; ub3; ub4; ub5; ub6];
 %% prepare solver parameter
 
 % constraints characters
-ctype =repelem(['S','U', 'U','L','U','L','U','L','S'],...
+ctype =repelem(['S','U','U','L','U','L','U','L','S'],...
                [nx*Np, ng*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
 
 % ctype =repelem(['S','U','L','U','L','U','L','S'],...
