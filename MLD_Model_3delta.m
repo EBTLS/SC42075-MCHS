@@ -18,8 +18,11 @@ v1 = 15;
 v2 = 28.8575;
 v3 = 30;
 
-m = vmin;
-M = vmax;
+m_v = vmin;
+M_v = vmax;
+
+m_u = -1.3;
+M_u = 1.3;
 
 % binary auxiliary variables
 % d1 <-> v <= v1
@@ -79,9 +82,9 @@ constraints = [];
 % delta variables constraints
 % d1 -> v - v1 <= 0 
 g = [];
-temp_g = (v - v1) <= M * (1 - d1);
+temp_g = (v - v1) <= M_v * (1 - d1);
 g = [g;temp_g];
-temp_g = (v - v1) >= epsilon + (m - epsilon) * d1;
+temp_g = (v - v1) >= epsilon + (m_v - epsilon) * d1;
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d1 -> v - v1 <= 0\n");
@@ -89,9 +92,9 @@ pretty(g);
 
 % d2 -> v - v2 <= 0 
 g = [];
-temp_g = (v - v2) <= M * (1 - d2);
+temp_g = (v - v2) <= M_v * (1 - d2);
 g = [g;temp_g];
-temp_g = (v - v2) >= epsilon + (m - epsilon) * d2;
+temp_g = (v - v2) >= epsilon + (m_v - epsilon) * d2;
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d2 -> v - v2 <= 0\n");
@@ -99,9 +102,9 @@ pretty(g);
 
 % d3 -> v - v3 <= 0 
 g = [];
-temp_g = (v - v3) <= M * (1 - d3);
+temp_g = (v - v3) <= M_v * (1 - d3);
 g = [g;temp_g];
-temp_g = (v - v3) >= epsilon + (m - epsilon) * d3;
+temp_g = (v - v3) >= epsilon + (m_v - epsilon) * d3;
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d3 -> v - v3 <= 0\n");
@@ -110,13 +113,13 @@ pretty(g);
 % z variables constraints
 % d1*u -> z1
 g = [];
-temp_g = z1 <= M * d1;
+temp_g = z1 <= M_u * d1;
 g = [g;temp_g];
-temp_g = z1 >= m * d1;
+temp_g = z1 >= m_u * d1;
 g = [g;temp_g];
-temp_g = z1 <= u - m * (1 - d1);
+temp_g = z1 <= u - m_u * (1 - d1);
 g = [g;temp_g];
-temp_g = z1 >= u - M * (1 - d1);
+temp_g = z1 >= u - M_u * (1 - d1);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d1*u -> z1\n");
@@ -124,13 +127,13 @@ pretty(g);
 
 % d2*v -> z2
 g = [];
-temp_g = z2 <= M * d2;
+temp_g = z2 <= M_v * d2;
 g = [g;temp_g];
-temp_g = z2 >= m * d2;
+temp_g = z2 >= m_v * d2;
 g = [g;temp_g];
-temp_g = z2 <= v - m * (1 - d2);
+temp_g = z2 <= v - m_v * (1 - d2);
 g = [g;temp_g];
-temp_g = z2 >= v - M * (1 - d2);
+temp_g = z2 >= v - M_v * (1 - d2);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d2*v -> z2\n");
@@ -138,13 +141,13 @@ pretty(g);
 
 % d3*u -> z3
 g = [];
-temp_g = z3 <= M * d3;
+temp_g = z3 <= M_u * d3;
 g = [g;temp_g];
-temp_g = z3 >= m * d3;
+temp_g = z3 >= m_u * d3;
 g = [g;temp_g];
-temp_g = z3 <= u - m * (1 - d3);
+temp_g = z3 <= u - m_u * (1 - d3);
 g = [g;temp_g];
-temp_g = z3 >= u - M * (1 - d3);
+temp_g = z3 >= u - M_u * (1 - d3);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d3*u -> z3\n");
@@ -231,23 +234,6 @@ MLD.E4(16, 3) = -1;
 MLD.E4(17, 3) = 1;
 MLD.E4(18, 3) = -1;
 
-% % define g5, constant
-% % d1
-% MLD.g5(1) = -15 - 11543/200;
-% MLD.g5(2) = 1/1000 + 15;
-% % d2
-% MLD.g5(3) = -11543/400 - 11543/200;
-% MLD.g5(4) = 1/1000 + 11543/400;
-% % d3
-% MLD.g5(5) = -30 - 11543/200;
-% MLD.g5(6) = 1/1000 + 30;
-% % d1*u -> z1
-% MLD.g5(10) = -11543/200;
-% % d2*v -> z2
-% MLD.g5(14) = -11543/200;
-% % d3*u -> z3
-% MLD.g5(18) = -11543/200;
-
 % define g5, constant
 % d1
 MLD.g5(1) = 15 + 11543/200;
@@ -266,6 +252,5 @@ MLD.g5(14) = 11543/200;
 MLD.g5(18) = 11543/200;
 
 model = MLD;
-
 end
 
