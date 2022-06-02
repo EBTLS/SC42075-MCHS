@@ -4,9 +4,8 @@
 %%% Author: Jiaxuan Zhang, Yiting Li
 %%%%%
 
-clear 
+clear all
 close all
-clc
 
 %% Global Parameters
 m = 800;
@@ -48,7 +47,7 @@ beta = 249.8266;
 %% step 2.3
 
 test_t = 5;
-step_3.y0 = [0; 30];
+step_3.y0 = [0;30];
 
 % original function simulation
 [temp_t, temp_y] = ode45(@(t,y) dydt_step3(t,y,0,alpha,beta,m,gamma,b,c,vmax),...
@@ -106,22 +105,19 @@ title("step 3 simulation speed")
 
 %% step 2.6
 
-model = MLD_Model_3delta();
-
-
+model = MLD_Model_3delta()
 
 
 %% step 2.7
-lambda = 0.1;
-Np = 2;
-Nc = 2;
-x_0 = [0];
-d_0 = [1; 1; 1];
-z_0 = [0; 0; 0];
-u_0 = 0;
-Ts = 0.15;
-x_ref = [20; 20];
-
-[flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                x_0, d_0, z_0, u_0, model, Ts, x_ref )
-
+% lambda = 0.1;
+% Np = 2;
+% Nc = 1;
+% x_0 = [0];
+% d_0 = [1; 1; 1];
+% z_0 = [0; 0; 0];
+% u_0 = 0;
+% Ts = 0.15;
+% x_ref = [10; 10];
+% 
+% [flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+%                 x_0, d_0, z_0, u_0, model, Ts, x_ref )
