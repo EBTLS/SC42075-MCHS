@@ -174,7 +174,7 @@ clear g temp_g
 
 %% change to standard MLD constraints
 
-ng = nd * 2 + nz * 4 + 2;
+ng = nd * 2 + nz * 4;
 
 % E1*v + E2*u + E3*d + E4*z <= g5
 MLD.E1 = zeros(ng, nv);
@@ -258,8 +258,6 @@ MLD.g5(14) = 11543/200;
 % d3*u -> z3
 MLD.g5(17) = 13/10;
 MLD.g5(18) = 13/10;
-
-MLD.g5(20) = 11543/200;
 
 model = MLD;
 end

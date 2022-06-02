@@ -230,11 +230,11 @@ ub = [ub1; ub2; ub3; ub4; ub5; ub6];
 %% prepare solver parameter
 
 % constraints characters
-% ctype =repelem(['S','U','U','L','U','L','U','L','S'],...
-%                [nx*Np, ng*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
+ctype =repelem(['S','U','U','L','U','L','U','L','S'],...
+               [nx*Np, ng*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
 
-ctype =repelem(['S','U','L','U','L','U','L','S'],...
-               [nx*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
+% ctype =repelem(['S','U','L','U','L','U','L','S'],...
+%                [nx*Np, nx*Np, nx*Np, nu*Np, nu*Np, nx*Np, nx*Np, nu*Np]);
 
 
 % types of the variables

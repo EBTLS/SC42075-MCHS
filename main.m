@@ -48,7 +48,7 @@ beta = 249.8266;
 %% step 2.3
 
 test_t = 5;
-step_3.y0 = [0;10];
+step_3.y0 = [0; 30];
 
 % original function simulation
 [temp_t, temp_y] = ode45(@(t,y) dydt_step3(t,y,0,alpha,beta,m,gamma,b,c,vmax),...
