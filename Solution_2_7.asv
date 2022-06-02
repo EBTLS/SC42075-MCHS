@@ -50,7 +50,7 @@ A11 = eye(Np) + A11;
 aux_matrix = diag(ones(1, Np), 0);
 A12 = -kron(aux_matrix, model.B1);
 
-aux_matrix = diag(ones(1,Np-1), -1);
+aux_matrix = diag(ones(1,Np-1),-1);
 A13 = -kron(aux_matrix, model.B2);
 
 A14 = -kron(aux_matrix, model.B3);
@@ -185,11 +185,11 @@ b9 = zeros(Np, 1);
 flag = 0 ;
 
 % combined them together
-A = [A1; A2; A3; A4; A5; A6; A7; A8; A9];
-b = [b1; b2; b3; b4; b5; b6; b7; b8; b9];
+% A = [A1; A2; A3; A4; A5; A6; A7; A8; A9];
+% b = [b1; b2; b3; b4; b5; b6; b7; b8; b9];
 
-% A = [A1; A3; A4; A5; A6; A7; A8; A9];
-% b = [b1; b3; b4; b5; b6; b7; b8; b9];
+A = [A1; A3; A4; A5; A6; A7; A8; A9];
+b = [b1; b3; b4; b5; b6; b7; b8; b9];
 
 
 %% prepare lb and ub
@@ -217,9 +217,9 @@ ub3 = 1 * ones(Np*nd, 1);
 % z ub
 aux_matrix = ones(Np,1);
 ub4 = kron(aux_matrix, [umax; vmax; umax]);
-% rho ub
+% rho lb
 ub5 = +Inf * ones(Np, 1);
-% tau ub
+% tau lb
 ub6 = +Inf * ones(1);
 
 % combine the ub and lb
@@ -253,7 +253,7 @@ param.lpsolver = 2;
 
 if flag == -1
    
-    fprintf("flag == -1");;
+    ;
     
 else
 
