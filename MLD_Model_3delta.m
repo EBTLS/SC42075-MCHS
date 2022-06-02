@@ -22,9 +22,8 @@ v3 = 30;
 
 m_v = vmin;
 M_v = vmax;
-
-m_u = -1.3;
-M_u = 1.3;
+m_u = umin;
+M_u = umax;
 
 % binary auxiliary variables
 % d1 -> v <= v1
@@ -115,13 +114,13 @@ pretty(g);
 % z variables constraints
 % d1*u -> z1
 g = [];
-temp_g = z1 <= umax * d1;
+temp_g = z1 <= M_u * d1;
 g = [g;temp_g];
-temp_g = z1 >= umin * d1;
+temp_g = z1 >= m_u * d1;
 g = [g;temp_g];
-temp_g = z1 <= u - umin * (1 - d1);
+temp_g = z1 <= u - m_u * (1 - d1);
 g = [g;temp_g];
-temp_g = z1 >= u - umax * (1 - d1);
+temp_g = z1 >= u - M_u * (1 - d1);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d1*u -> z1\n");
@@ -143,13 +142,13 @@ pretty(g);
 
 % d3*u -> z3
 g = [];
-temp_g = z3 <= umax * d3;
+temp_g = z3 <= M_u * d3;
 g = [g;temp_g];
-temp_g = z3 >= umin * d3;
+temp_g = z3 >= m_u * d3;
 g = [g;temp_g];
-temp_g = z3 <= u - umin * (1 - d3);
+temp_g = z3 <= u - m_u * (1 - d3);
 g = [g;temp_g];
-temp_g = z3 >= u - umax * (1 - d3);
+temp_g = z3 >= u - M_u * (1 - d3);
 g = [g;temp_g];
 constraints = [constraints ; g];
 fprintf("d3*u -> z3\n");
