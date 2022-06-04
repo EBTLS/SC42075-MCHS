@@ -1,4 +1,4 @@
-function [flag,x,u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, d_0, z_0, u_0, model, Ts, x_ref)
+function [flag,x,u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, u_0, model, Ts, x_ref)
 %Solution_2_7 Solution file for question 2.7
 %   Detailed explanation goes here
 % Input:
@@ -9,14 +9,14 @@ function [flag,x,u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_com
 %   vmax, vmin: min and max speed
 %   a_comfort: comfortable acceleration limitation
 %   x_0: initial x 
-%   d_0: initial d
-%   z_0: initial z
 %   u_0: previous input
 %   model: MLD model
 %   Ts: sampling time
 %   x_ref: reference x
 % Output:
-%   
+%   flag: 1 for feasible optimal solution
+%   x: the result of the decision variables
+%   u: the optimal u for Np
 
 
 %% define parameters
@@ -25,6 +25,32 @@ nu = 1; % dimension of u
 nd = 3; % dimension of d
 nz = 3; % dimension of z
 ng = size(model.g5, 1); % how many inequality constraints
+
+v1 = 15;
+v2 = 28.8575;
+v3 = 30;
+
+%% judge d_0 and z_0
+
+if x_0 <= v1
+    
+    d_0 = [1; 1; 1];
+    
+elseif x_0 <= v2
+    
+    d_0 = [0; 1; 1];
+    
+elseif x_0 <=v3
+    
+    d_0 = [0; 0; 1];
+    
+else
+    
+    d_0 = [0; 0; 0];
+    
+end
+
+z_0 = d_0 .* [u_0; x_0; u_0];
 
 %% prepare target function
 
@@ -249,7 +275,7 @@ sense = 1;
 
 % solver options
 param.msglev = 3;
-param.lpsolver = 2;
+% param.lpsolver = 2;
 
 %% call solver
 
