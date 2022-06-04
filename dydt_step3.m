@@ -34,7 +34,7 @@ function dydt = dydt_step3(t,y,model,alpha,beta,m,gamma,b,c,vmax)
         
             dydt(1) = y(2);
             dydt(2) = 1/m * b/(1 + gamma * gear) * u -...
-                1/m * ((c * vmax^2 - beta)/(vmax - alpha) * (y(2) - vmax) + c * vmax^2);   
+                1/m * (c * vmax^2 - beta)/(vmax - alpha) * (x - vmax) + c * vmax^2;   
             
         end    
     end

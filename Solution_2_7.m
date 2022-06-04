@@ -80,7 +80,6 @@ A2 = [A21, A22, A23, A24, A25, A26];
 b2 = ones(Np,1);
 b2 = kron(b2, model.g5);
 
-
 % optimization  construction
 % for rho
 A31 = eye(Np);
@@ -183,6 +182,7 @@ A96 = zeros(Np, 1);
 A9 = [A91, A92, A93, A94, A95, A96];
 b9 = zeros(Np, 1);
 
+
 flag = 0 ;
 
 % combined them together
@@ -226,6 +226,7 @@ ub6 = +Inf * ones(1);
 % combine the ub and lb
 lb = [lb1; lb2; lb3; lb4; lb5; lb6];
 ub = [ub1; ub2; ub3; ub4; ub5; ub6];
+
 
 
 %% prepare solver parameter
