@@ -110,15 +110,28 @@ model = MLD_Model_3delta()
 
 %% step 2.7
 lambda = 0.1;
-Np = 5;
-Nc = 4;
-x_0 = [20];
-d_0 = [0; 1; 1];
-z_0 = [0; 0; 0];
+Np = 2;
+Nc = 2;
+x_0 = [0];
 u_0 = 0;
 Ts = 0.15;
-x_ref = [28; 28; 28; 28; 28];
+x_ref = [10; 10;];
 
 [flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                x_0, d_0, z_0, u_0, model, Ts, x_ref )
+                x_0, u_0, model, Ts, x_ref )
+            
+            
+%% step 2.8
+lambda = 0.1;
+Np = 2;
+Nc = 2;
+x_0 = [0];
+u_0 = 0;
+Ts = 0.15;
+T_0 = 0;
+T_end = 25;
+x_ref = 30 * ones(1, length(T_0: Ts: T_end));
+
+[flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                x_0, u_0, model, Ts, x_ref);
 
