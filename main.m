@@ -117,8 +117,8 @@ u_0 = 0;
 Ts = 0.15;
 x_ref = [10; 10;];
 
-[flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                x_0, u_0, model, Ts, x_ref )
+[flag, x, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                x_0, u_0, model, Ts, x_ref);
             
             
 %% step 2.8
@@ -130,8 +130,8 @@ u_0 = 0;
 Ts = 0.15;
 T_0 = 0;
 T_end = 25;
-x_ref = 30 * ones(1, length(T_0: Ts: T_end));
+x_ref = 5 * ones(length(T_0: Ts: T_end), 1);
 
-[flag, x, u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                x_0, u_0, model, Ts, x_ref);
+[x, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, u_0, x_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 

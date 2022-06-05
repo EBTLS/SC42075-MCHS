@@ -1,4 +1,4 @@
-function [flag,x,u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, u_0, model, Ts, x_ref)
+function [flag, x, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, u_0, model, Ts, x_ref)
 %Solution_2_7 Solution file for question 2.7
 %   Detailed explanation goes here
 % Input:
@@ -17,6 +17,8 @@ function [flag,x,u] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_com
 %   flag: 1 for feasible optimal solution
 %   x: the result of the decision variables
 %   u: the optimal u for Np
+%   xc: current state
+%   uc: the optimal u for current time
 
 
 %% define parameters
@@ -289,30 +291,35 @@ else
 
     if (status == 2)
 
-        fprintf("feasible solution exists");
+        fprintf("feasible solution exists \n");
         
-        fprintf("optimal objective function: d%", fopt);
+        fprintf("optimal objective function: d% \n", fopt);
         
         x = xopt;
         u = xopt([Np+1: 1: Np+Np]);
+        xc = x_0;
+        uc = u(1);
         flag = 1;
         
     elseif (status == 5)
 
-        fprintf("optimal solution exists");
+        fprintf("optimal solution exists \n");
         
-        fprintf("optimal objective function: d%", fopt);
+        fprintf("optimal objective function: d% \n", fopt);
         
         x = xopt;
         u = xopt([Np+1: 1: Np+Np]);
+        xc = x_0;
+        uc = u(1);
         flag = 1;
 
     else
         
-        fprintf("no feasible solution exists");
+        fprintf("no feasible solution exists \n");
         x = Inf;
         u = Inf;
-        
+        xc = Inf;
+        uc = Inf;
         
     end
     
