@@ -21,24 +21,19 @@ temp = 1.2 * alpha * ones((length(T1: Ts: T2)-1), 1);
 x_ref = [x_ref; temp];
 
 % 9 < t <= 15
-t = T2 + Ts;
 for i = 1 : (length(T2: Ts: T3)-1)
-    temp = 1.2 * alpha - 1/12 * alpha * (t - 9);
-    t = t + Ts;
-    x_ref = [x_ref; temp];
+    temp = 1.2 * alpha + 
 end
+temp = 0.85*alpha * ones((length(T2: Ts: T3)-1), 1);
+x_ref = [x_ref; temp];
 
 % 15 < t <= 18
 temp = 0.7 * alpha * ones((length(T3: Ts: T4)-1), 1);
 x_ref = [x_ref; temp];
 
 % 18 < t <= 21
-t = T4 + Ts;
-for i = 1 : (length(T4: Ts: T5)-1)
-    temp = 0.7 * alpha + 4/15 * alpha * (t - 18);
-    t = t + Ts;
-    x_ref = [x_ref; temp];
-end
+temp = 0.85*alpha * ones((length(T4: Ts: T5)-1), 1);
+x_ref = [x_ref; temp];
 
 % 21 < t <= 25
 temp = 0.9 * alpha * ones((length(T5: Ts: T_end)-1), 1);

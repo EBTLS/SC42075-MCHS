@@ -74,7 +74,7 @@ for t = T_0: Ts: T_end
         
     else
         
-        temp_x_ref = x_ref([i: 1: i + Np - 1])
+        temp_x_ref = x_ref([i: 1: i + Np - 1]);
         
     end
     
@@ -85,7 +85,7 @@ for t = T_0: Ts: T_end
     if flag == 1
         
         % update state with continuous model
-        [temp_t, temp_x] = ode45(modelc, [0,Ts], [0; xc; uc]);
+        [temp_t, temp_x] = ode45(modelc, [0, Ts], [0; xc; uc]);
         
     else
     
@@ -128,15 +128,7 @@ if flag == 1
     xlabel('t');
     ylabel('u');
     title("simulation result: u")
-
-
-else
-    
-    ;
-    
 end
-
-    
 
 end
 

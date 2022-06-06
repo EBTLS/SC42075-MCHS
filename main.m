@@ -4,8 +4,9 @@
 %%% Author: Jiaxuan Zhang, Yiting Li
 %%%%%
 
-clear all
+clear 
 close all
+clc
 
 %% Global Parameters
 m = 800;
@@ -105,7 +106,7 @@ title("step 3 simulation speed")
 
 %% step 2.6
 
-model = MLD_Model_3delta()
+model = MLD_Model_3delta();
 
 
 %% step 2.7
@@ -122,12 +123,12 @@ x_ref = [10; 10;];
             
             
 %% step 2.8
-lambda = 0.1;
-Np = 2;
-Nc = 2;
-x_0 = [0];
-u_0 = 0;
-Ts = 0.15;
+% lambda = 0.1;
+% Np = 2;
+% Nc = 2;
+% x_0 = [0];
+% u_0 = 0;
+% Ts = 0.15;
 T_0 = 0;
 T_end = 25;
 x_ref = 5 * ones(length(T_0: Ts: T_end), 1);
@@ -135,3 +136,20 @@ x_ref = 5 * ones(length(T_0: Ts: T_end), 1);
 [x, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
                 x_0, u_0, x_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
+%% step 2.9
+
+lambda = 0.1;
+Np = 9;
+Nc = 8;
+x_0 = 0.9*alpha;
+u_0 = 0;
+Ts = 0.15;
+T_0 = 0;
+T_end = 25;
+x_ref = GenerateXRef_2_8(Ts, alpha);
+
+[x, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, u_0, x_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+
+            
+%% step 2.10

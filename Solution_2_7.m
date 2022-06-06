@@ -282,8 +282,6 @@ param.msglev = 3;
 %% call solver
 
 if flag == -1
-   
-    ;
     
 else
 
