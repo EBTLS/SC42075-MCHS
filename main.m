@@ -45,10 +45,27 @@ clear a_dec_max_1 a_dec_max_2 a_dec_max_3
 alpha = 28.8575;
 beta = 249.8266;
 
+figure;
+
+v = [0: 0.1: vmax];
+v1 = [0: 0.1: alpha];
+v2 = [alpha: 0.1: vmax];
+plot(v, c*v.^2, 'b');
+hold on
+plot(v1, beta/alpha*v1, 'r')
+hold on
+plot(v2, ((c*vmax^2 - beta)/(vmax-alpha)*(v2 - vmax) + c*vmax^2), 'r')
+grid on
+legend('V(v)', 'P(v)');
+xlabel('v');
+ylabel('m*F_{firction}');
+title("approximation result")  
+
+clear v v1 v2 
 %% step 2.3
 
 test_t = 5;
-step_3.y0 = [0;10];
+step_3.y0 = [0;44];
 
 % original function simulation
 [temp_t, temp_y] = ode45(@(t,y) dydt_step3(t,y,0,alpha,beta,m,gamma,b,c,vmax),...
