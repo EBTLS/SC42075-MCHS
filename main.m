@@ -113,43 +113,46 @@ model = MLD_Model_3delta();
 lambda = 0.1;
 Np = 2;
 Nc = 2;
-x_0 = [0];
+x_0 = 5;
+v_0 = [0];
 u_0 = 0;
 Ts = 0.15;
-x_ref = [10; 10;];
+v_ref = [10; 10];
 
-[flag, x, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                x_0, u_0, model, Ts, x_ref);
+[flag, v, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                v_0, u_0, model, Ts, v_ref);
             
             
 %% step 2.8
 % lambda = 0.1;
 % Np = 2;
 % Nc = 2;
-% x_0 = [0];
+% x_0 = 5;
+% v_0 = [0];
 % u_0 = 0;
 % Ts = 0.15;
 T_0 = 0;
 T_end = 25;
-x_ref = 5 * ones(length(T_0: Ts: T_end), 1);
+v_ref = 5 * ones(length(T_0: Ts: T_end), 1);
 
-[x, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, u_0, x_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+[v, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
 %% step 2.9
 
 lambda = 0.1;
 Np = 9;
 Nc = 8;
-x_0 = 0.9*alpha;
+x_0 = 5;
+v_0 = 0.9*alpha;
 u_0 = 0;
 Ts = 0.15;
 T_0 = 0;
 T_end = 25;
-x_ref = GenerateXRef_2_8(Ts, alpha);
+v_ref = GenerateXRef_2_8(Ts, alpha);
 
-[x, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, u_0, x_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+[v, u] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
             
 %% step 2.10

@@ -1,4 +1,4 @@
-function [flag, x, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, x_0, u_0, model, Ts, x_ref)
+function [flag, v, u, vc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort, v_0, u_0, model, Ts, v_ref)
 %Solution_2_7 Solution file for question 2.7
 %   Detailed explanation goes here
 % Input:
@@ -8,16 +8,16 @@ function [flag, x, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, v
 %   umax, umin: min and max input
 %   vmax, vmin: min and max speed
 %   a_comfort: comfortable acceleration limitation
-%   x_0: initial x 
+%   v_0: initial v 
 %   u_0: previous input
 %   model: MLD model
 %   Ts: sampling time
-%   x_ref: reference x
+%   v_ref: reference v
 % Output:
 %   flag: 1 for feasible optimal solution
-%   x: the result of the decision variables
+%   v: the result of the decision variables
 %   u: the optimal u for Np
-%   xc: current state
+%   vc: current state
 %   uc: the optimal u for current time
 
 
@@ -34,15 +34,15 @@ v3 = 30;
 
 %% judge d_0 and z_0
 
-if x_0 <= v1
+if v_0 <= v1
     
     d_0 = [1; 1; 1];
     
-elseif x_0 <= v2
+elseif v_0 <= v2
     
     d_0 = [0; 1; 1];
     
-elseif x_0 <=v3
+elseif v_0 <=v3
     
     d_0 = [0; 0; 1];
     
@@ -52,7 +52,7 @@ else
     
 end
 
-z_0 = d_0 .* [u_0; x_0; u_0];
+z_0 = d_0 .* [u_0; v_0; u_0];
 
 %% prepare target function
 
@@ -60,7 +60,7 @@ c1 = zeros(1, nx*Np); % for x
 c2 = zeros(1, nx*Np); % for u
 c3 = zeros(1, nd*Np); % for delta
 c4 = zeros(1, nz*Np); % for z
-c5 = ones(1,Np); % for rho
+c5 = ones(1, Np); % for rho
 c6 = lambda; % for tau
 
 c = [c1, c2, c3, c4, c5, c6];
@@ -87,7 +87,7 @@ A16 = zeros(Np,1);
 
 A1 = [A11, A12, A13, A14, A15, A16];
 b1 = ones(Np,1) * model.constant;
-b1(1) = b1(1) + model.A1 * x_0 + model.B2 * d_0 + model.B3 * z_0;
+b1(1) = b1(1) + model.A1 * v_0 + model.B2 * d_0 + model.B3 * z_0;
 
 % original inequalities
 aux_matrix = diag(ones(1, Np), 0);
@@ -118,7 +118,7 @@ A35 = -eye(Np, Np);
 A36 = zeros(Np, 1);
 
 A3 = [A31, A32, A33, A34, A35, A36];
-b3 = x_ref;
+b3 = v_ref;
 
 A41 = eye(Np);
 A42 = zeros(Np, Np);
@@ -128,7 +128,7 @@ A45 = eye(Np, Np);
 A46 = zeros(Np, 1);
 
 A4 = [A41, A42, A43, A44, A45, A46];
-b4 = x_ref;
+b4 = v_ref;
 
 % for tau
 A51 = zeros(Np, Np);
@@ -170,7 +170,7 @@ A76 = zeros(Np, 1);
 
 A7 = [A71, A72, A73, A74, A75, A76];
 b7 = zeros(Np, 1);
-b7(1) =x_0;
+b7(1) =v_0;
 b7 = b7 + a_comfort * Ts * ones(Np, 1);
 
 aux_matrix = - diag(ones(1,Np-1),-1);
@@ -183,7 +183,7 @@ A86 = zeros(Np, 1);
 
 A8 = [A81, A82, A83, A84, A85, A86];
 b8 = zeros(Np, 1);
-b8(1) =x_0;
+b8(1) =v_0;
 b8 = b8 - a_comfort * Ts * ones(Np, 1);
 
 % prediction horizon vs control horizon
@@ -293,9 +293,9 @@ else
         
         fprintf("optimal objective function: d% \n", fopt);
         
-        x = xopt;
+        v = xopt;
         u = xopt([Np+1: 1: Np+Np]);
-        xc = x_0;
+        vc = v_0;
         uc = u(1);
         flag = 1;
         
@@ -305,18 +305,18 @@ else
         
         fprintf("optimal objective function: d% \n", fopt);
         
-        x = xopt;
+        v = xopt;
         u = xopt([Np+1: 1: Np+Np]);
-        xc = x_0;
+        vc = v_0;
         uc = u(1);
         flag = 1;
 
     else
         
         fprintf("no feasible solution exists \n");
-        x = Inf;
+        v = Inf;
         u = Inf;
-        xc = Inf;
+        vc = Inf;
         uc = Inf;
         
     end

@@ -1,4 +1,4 @@
-function [x, u] = Simulator_2_8(Np, Nc, lambda, u_range, v_range, a_comfort, x_0, u_0, x_ref, Ts, Tspand, model_mld, modelc)
+function [v, u] = Simulator_2_8(Np, Nc, lambda, u_range, v_range, a_comfort, x_0, v_0, u_0, v_ref, Ts, Tspand, model_mld, modelc)
 %Simulator_2_8:  Simulator to simulate the closed-loop behavior of the system
 % Input:
 %   Np: prediction horizon
@@ -7,10 +7,10 @@ function [x, u] = Simulator_2_8(Np, Nc, lambda, u_range, v_range, a_comfort, x_0
 %   urange: [umin, umax] min and max input
 %   v_range: [vmin, vmax] min and max speed
 %   a_comfort: comfortable acceleration limitation
-%   x_0: initial x 
+%   v_0: initial v 
 %   model: MLD model
 %   Ts: sampling time
-%   x_ref: reference x
+%   v_ref: reference v
 %   Tspand: [T_0, T_end]: starting time and stop time
 %   model_mld: MLD model
 %   modelc: continuous time model
@@ -34,15 +34,15 @@ T_end = Tspand(2);
 
 %% judge d_0 and z_0
 
-if x_0 <= v1
+if v_0 <= v1
     
     d_0 = [1; 1; 1];
     
-elseif x_0 <= v2
+elseif v_0 <= v2
     
     d_0 = [0; 1; 1];
     
-elseif x_0 <=v3
+elseif v_0 <=v3
     
     d_0 = [0; 0; 1];
     
@@ -52,15 +52,17 @@ else
     
 end
 
-z_0 = d_0 .* [u_0; x_0; u_0];
+z_0 = d_0 .* [u_0; v_0; u_0];
 
 %% start simulation
 
 x_history = zeros(1, length(T_0: Ts: T_end));
+v_history = zeros(1, length(T_0: Ts: T_end));
 u_history = zeros(1, length(T_0: Ts: T_end));
 
 i = 1;
 x_history(i) = x_0;
+v_history(i) = v_0;
 u_history(i) = u_0;
 
 for t = T_0: Ts: T_end
@@ -69,23 +71,23 @@ for t = T_0: Ts: T_end
     % if Np future > T_end, 
     % then extend reference with the last element in x_ref
     
-        temp_x_ref = x_ref([i: 1: end]);
-        temp_x_ref = [temp_x_ref; x_ref(end) * ones(Np - length(temp_x_ref), 1)]; 
+        temp_v_ref = v_ref([i: 1: end]);
+        temp_v_ref = [temp_v_ref; v_ref(end) * ones(Np - length(temp_v_ref), 1)]; 
         
     else
         
-        temp_x_ref = x_ref([i: 1: i + Np - 1]);
+        temp_v_ref = v_ref([i: 1: i + Np - 1]);
         
     end
     
     
-    [flag, x, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort,... 
-                x_0, u_0, model_mld, Ts, temp_x_ref);
+    [flag, v, u, vc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comfort,... 
+                v_0, u_0, model_mld, Ts, temp_v_ref);
             
     if flag == 1
         
         % update state with continuous model
-        [temp_t, temp_x] = ode45(modelc, [0, Ts], [0; xc; uc]);
+        [temp_t, temp_v] = ode45(modelc, [0, Ts], [10; vc; uc]);
         
     else
     
@@ -95,11 +97,13 @@ for t = T_0: Ts: T_end
     end
     
     % update state and input 
-    x_0 = temp_x(end, 2);
+    v_0 = temp_v(end, 2);
+    x_0 = x_0 + v_0 * Ts;
     u_0 = u(1);
     
     % store state and input
     x_history(i) = x_0;
+    v_history(i) = v_0;
     u_history(i) = u_0;
     i = i + 1;
     
@@ -110,16 +114,40 @@ end
 
 if flag == 1
 % if feasible simulation
-
     figure
-    plot([T_0: Ts: T_end], x_ref, 'r');
-    hold on;
-    plot([T_0: Ts: T_end], x_history, 'b');
+    plot(x_history, v_history, 'r');
     grid on;
-    legend('x_{ref}', 'x');
+    legend('trajectories of (x,v)');
+    xlabel('x');
+    ylabel('v');
+    title("simulation result: trajectories of (x,v)")
+    
+    figure
+    plot([T_0: Ts: T_end], x_history, 'r');
+    grid on;
+    legend('x');
+    xlabel('t');
+    ylabel('x');
+    title("simulation result: x")
+    
+    figure
+    plot([T_0: Ts: T_end], v_ref, 'r');
+    hold on;
+    plot([T_0: Ts: T_end], v_history, 'b');
+    grid on;
+    legend('v_{ref}', 'v');
     xlabel('t');
     ylabel('v');
     title("simulation result: v")
+    
+    v_diff = v_history' - v_ref;
+    figure
+    plot([T_0: Ts: T_end], v_diff);
+    grid on;
+    legend('(v - v_{ref})');
+    xlabel('t');
+    ylabel('(v - v_{ref})');
+    title("simulation result: (v - v_{ref})")
     
     figure
     plot([T_0: Ts: T_end], u_history, 'b');
@@ -128,6 +156,16 @@ if flag == 1
     xlabel('t');
     ylabel('u');
     title("simulation result: u")
+    
+    temp = circshift(u_history, 1);
+    u_diff = u_history - temp;
+    figure
+    plot([T_0: Ts: T_end], u_diff, 'b');
+    grid on;
+    legend('\Delta u');
+    xlabel('t');
+    ylabel('\Delta u');
+    title("simulation result: \Delta u")
 end
 
 end
