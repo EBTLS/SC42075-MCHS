@@ -1,4 +1,4 @@
-function [v, u] = Simulator_2_8(Np, Nc, lambda, u_range, v_range, a_comfort, x_0, v_0, u_0, v_ref, Ts, Tspand, model_mld, modelc)
+function [v, u, Result] = Simulator_2_8(Np, Nc, lambda, u_range, v_range, a_comfort, x_0, v_0, u_0, v_ref, Ts, Tspand, model_mld, modelc)
 %Simulator_2_8:  Simulator to simulate the closed-loop behavior of the system
 % Input:
 %   Np: prediction horizon
@@ -114,58 +114,16 @@ end
 
 if flag == 1
 % if feasible simulation
-    figure
-    plot(x_history, v_history, 'r');
-    grid on;
-    legend('trajectories of (x,v)');
-    xlabel('x');
-    ylabel('v');
-    title("simulation result: trajectories of (x,v)")
-    
-    figure
-    plot([T_0: Ts: T_end], x_history, 'r');
-    grid on;
-    legend('x');
-    xlabel('t');
-    ylabel('x');
-    title("simulation result: x")
-    
-    figure
-    plot([T_0: Ts: T_end], v_ref, 'r');
-    hold on;
-    plot([T_0: Ts: T_end], v_history, 'b');
-    grid on;
-    legend('v_{ref}', 'v');
-    xlabel('t');
-    ylabel('v');
-    title("simulation result: v")
-    
     v_diff = v_history' - v_ref;
-    figure
-    plot([T_0: Ts: T_end], v_diff);
-    grid on;
-    legend('(v - v_{ref})');
-    xlabel('t');
-    ylabel('(v - v_{ref})');
-    title("simulation result: (v - v_{ref})")
-    
-    figure
-    plot([T_0: Ts: T_end], u_history, 'b');
-    grid on;
-    legend('u');
-    xlabel('t');
-    ylabel('u');
-    title("simulation result: u")
-    
     temp = circshift(u_history, 1);
     u_diff = u_history - temp;
-    figure
-    plot([T_0: Ts: T_end], u_diff, 'b');
-    grid on;
-    legend('\Delta u');
-    xlabel('t');
-    ylabel('\Delta u');
-    title("simulation result: \Delta u")
+    
+    Result.u_diff = u_diff;
+    Result.u_history = u_history;
+    Result.v_diff = v_diff;
+    Result.v_history = v_history;
+    Result.x_history = x_history;
+    Result.v_ref = v_ref;
 end
 
 end
