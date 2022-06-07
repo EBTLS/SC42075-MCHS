@@ -44,12 +44,5 @@ end
 temp = 0.9 * alpha * ones((length(T5: Ts: T_end)-1), 1);
 v_ref = [v_ref; temp];
 
-
-% plot([T_0: Ts: T_end], v_ref, '*');
-% grid on;
-% legend('v_{ref}');
-% xlabel('t');
-% ylabel('v_{ref}');
-% title("speed reference")
 end
 
