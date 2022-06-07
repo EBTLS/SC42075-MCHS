@@ -110,7 +110,7 @@ for t = T_0: Ts: T_end
 
 end
 
-%% plot the result
+%% store the result
 
 if flag == 1
 % if feasible simulation
