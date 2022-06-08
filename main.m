@@ -249,4 +249,4 @@ ylabel('\Delta u');
 title("simulation result: \Delta u")
 %% step 2.10
 
-
+explicit_model = Model_generator(MLD_model, vmin, vmax, umin, umax);
