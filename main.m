@@ -7,7 +7,7 @@
 clear 
 close all
 clc
-
+hysdel
 %% Global Parameters
 m = 800;
 c = 0.4;
@@ -123,7 +123,7 @@ title("step 3 simulation speed")
 
 %% step 2.6
 
-model = MLD_Model_3delta();
+MLD_model = MLD_Model_3delta();
 
 
 %% step 2.7
@@ -137,7 +137,7 @@ Ts = 0.15;
 v_ref = [10; 10];
 
 [flag, v, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                v_0, u_0, model, Ts, v_ref);
+                v_0, u_0, MLD_model, Ts, v_ref);
             
             
 %% step 2.8
@@ -153,7 +153,7 @@ T_end = 25;
 v_ref = 5 * ones(length(T_0: Ts: T_end), 1);
 
 [v, u, Result_constant_ref] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], MLD_model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
 %% step 2.9
 
@@ -169,7 +169,7 @@ T_end = 25;
 v_ref = GenerateXRef_2_8(Ts, alpha);
 
 [v, u, Results_varying_ref_5_4] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], MLD_model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
 lambda = 0.1;
 Np = 9;
@@ -183,7 +183,7 @@ T_end = 25;
 v_ref = GenerateXRef_2_8(Ts, alpha);
 
 [v, u, Results_varying_ref_9_8] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], MLD_model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
 
             
 figure
