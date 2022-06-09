@@ -7,7 +7,7 @@
 clear 
 close all
 clc
-hysdel
+
 %% Global Parameters
 m = 800;
 c = 0.4;
@@ -24,21 +24,24 @@ g = [1,2,3];
 
 %% Step 2.1
 % maximum speed: 57.7150 m/s;
-vmax = sqrt(1/c * b / (1 + g(3) * gamma) * umax);
+vmax_1 = sqrt(1/c * b / (1 + g(1) * gamma) * umax);
+vmax_2 = sqrt(1/c * b / (1 + g(2) * gamma) * umax);
+vmax_3 = sqrt(1/c * b / (1 + g(3) * gamma) * umax);
+vmax = min([vmax_1, vmax_2, vmax_3])
 
 % maximum accelerationg 3.2152 m/s^2
 a_acc_max = 1/m * b/(1 + g(1) * gamma) * umax - 0; 
 % maximum deacceleration
-% for state 1 (-3.4528 m/s^2), however, it is a limit number and cannot actually be achieved
+% for state 1 (-3.3277 m/s^2), however, it is a limit number and cannot actually be achieved
 a_dec_max_1 =  1/m * b/(1 + g(1) * gamma) * umin - 1/m * c * v12^2;
-% for state 2 (-2.7625 m/s^2), however, it is a limit number and cannot actually be achieved 
+% for state 2 (-2.6443 m/s^2), however, it is a limit number and cannot actually be achieved 
 a_dec_max_2 =  1/m * b/(1 + g(2) * gamma) * umin - 1/m * c * v23^2;
-% for state 3 (-3.5368 m/s^2), however, it is a limit number and cannot actually be achieved 
+% for state 3 (-3.3310 m/s^2), however, it is a limit number and cannot actually be achieved 
 a_dec_max_3 =  1/m * b/(1 + g(3) * gamma) * umin - 1/m * c * vmax^2;
 % maixmum deacceleartion is -3.3310 m/s^2
 a_dec_max = min([a_dec_max_1, a_dec_max_2, a_dec_max_3]);
 
-clear a_dec_max_1 a_dec_max_2 a_dec_max_3
+% clear a_dec_max_1 a_dec_max_2 a_dec_max_3
 %% step 2.2
 % model with two-point format 
 % by using maple, optimal alpha, beta are: alpha=28.8575, beta=249.8266
@@ -123,7 +126,7 @@ title("step 3 simulation speed")
 
 %% step 2.6
 
-MLD_model = MLD_Model_3delta();
+model = MLD_Model_3delta();
 
 
 %% step 2.7
@@ -137,7 +140,7 @@ Ts = 0.15;
 v_ref = [10; 10];
 
 [flag, v, u, xc, uc] = Solution_2_7(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                v_0, u_0, MLD_model, Ts, v_ref);
+                v_0, u_0, model, Ts, v_ref);
             
             
 %% step 2.8
@@ -153,7 +156,7 @@ T_end = 25;
 v_ref = 5 * ones(length(T_0: Ts: T_end), 1);
 
 [v, u, Result_constant_ref] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], MLD_model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
 %% step 2.9
 
@@ -169,7 +172,7 @@ T_end = 25;
 v_ref = GenerateXRef_2_8(Ts, alpha);
 
 [v, u, Results_varying_ref_5_4] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], MLD_model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
 
 lambda = 0.1;
 Np = 9;
@@ -183,7 +186,7 @@ T_end = 25;
 v_ref = GenerateXRef_2_8(Ts, alpha);
 
 [v, u, Results_varying_ref_9_8] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], MLD_model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
 
             
 figure
@@ -249,4 +252,14 @@ ylabel('\Delta u');
 title("simulation result: \Delta u")
 %% step 2.10
 
-explicit_model = Model_generator(MLD_model, vmin, vmax, umin, umax);
+lambda = 0.1;
+Np = 5;
+Nc = 5;
+x_0 = 5;
+v_0 = [0];
+u_0 = 0;
+Ts = 0.15;
+v_ref = [10; 10];
+
+[flag, explicit_ctrl] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                v_0, u_0, model, Ts, v_ref);
