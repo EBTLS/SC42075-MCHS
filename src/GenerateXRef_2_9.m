@@ -1,4 +1,4 @@
-function v_ref = GenerateXRef_2_8(Ts, alpha)
+function v_ref = GenerateXRef_2_9(Ts, alpha)
 %GenerateXRef_2_8 Generate the Corresponding x_ref Signal
 % Input:
 %   Ts: sampling time
