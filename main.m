@@ -8,6 +8,9 @@ clear
 close all
 clc
 
+%% add path
+addpath('./src')
+
 %% Global Parameters
 m = 800;
 c = 0.4;
@@ -169,7 +172,7 @@ u_0 = 0;
 Ts = 0.15;
 T_0 = 0;
 T_end = 25;
-v_ref = GenerateXRef_2_8(Ts, alpha);
+v_ref = GenerateXRef_2_9(Ts, alpha);
 
 [v, u, Results_varying_ref_5_4] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
                 x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
@@ -183,7 +186,7 @@ u_0 = 0;
 Ts = 0.15;
 T_0 = 0;
 T_end = 25;
-v_ref = GenerateXRef_2_8(Ts, alpha);
+v_ref = GenerateXRef_2_9(Ts, alpha);
 
 [v, u, Results_varying_ref_9_8] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
                 x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
@@ -253,13 +256,13 @@ title("simulation result: \Delta u")
 %% step 2.10
 
 lambda = 0.1;
-Np = 5;
-Nc = 5;
+Np = 2;
+Nc = 2;
 x_0 = 5;
 v_0 = [0];
 u_0 = 0;
 Ts = 0.15;
 v_ref = [10; 10];
 
-[flag, explicit_ctrl] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                v_0, u_0, model, Ts, v_ref);
+% [flag, explicit_ctrl] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+%                 v_0, u_0, model, Ts, v_ref);
