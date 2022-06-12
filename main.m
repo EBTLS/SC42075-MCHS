@@ -270,143 +270,119 @@ clear temp
 
 [ctrl_2_2, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
                 model, Ts, 'implicit');
+[explicit_ctrl_2_2, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                model, Ts, 'explicit');
+
 Np = 3;
 Nc = 3;            
 [ctrl_3_3, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
                 model, Ts, 'implicit');
+[explicit_ctrl_3_3, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
+                model, Ts, 'explicit');
+
 Np = 4;
 Nc = 4;
 [ctrl_4_4, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
                 model, Ts, 'implicit');            
-
-loop_im_2_2 = ClosedLoop(ctrl_2_2, sys);
-data_im_2_2 = loop_im_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-loop_im_3_3 = ClosedLoop(ctrl_3_3, sys);
-data_im_3_3 = loop_im_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-loop_im_4_4 = ClosedLoop(ctrl_4_4, sys);
-data_im_4_4 = loop_im_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-
-% figure;
-% 
-% subplot(2, 1, 1); 
-% plot(1:Nsim, data_im_2_2.X(1:Nsim), 'linewidth', 2); 
-% title('im state');
-% hold on
-% plot(1:Nsim, v_ref(1:Nsim), 'r');
-% hold on
-% plot(1:Nsim, sys.x.min*ones(1,Nsim), 'k--', 1:Nsim, sys.x.max*ones(1,Nsim), 'k--');
-% axis([1 Nsim 0 vmax]);
-% grid on
-% 
-% subplot(2, 1, 2); 
-% stairs(1:Nsim, data_im_2_2.U, 'linewidth', 2); 
-% title('output');
-% hold on
-% plot(1:Nsim, sys.u.min*ones(1,Nsim), 'k--', 1:Nsim, sys.u.max*ones(1,Nsim), 'k--');
-% axis([1 Nsim -1.3 1.3]);
-% grid on
-
-%%
-Np = 2;
-Nc = 2;
-
-[explicit_ctrl_2_2, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'explicit');
-            
-Np = 3;
-Nc = 3;
-
-[explicit_ctrl_3_3, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'explicit');
-            
-Np = 4;
-Nc = 4;
-
 [explicit_ctrl_4_4, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'explicit');            
-           
-loop_explicit_2_2 = ClosedLoop(explicit_ctrl_2_2, sys);
-data_explicit_2_2 = loop_explicit_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-loop_explicit_3_3 = ClosedLoop(explicit_ctrl_3_3, sys);
-data_explicit_3_3 = loop_explicit_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-loop_explicit_4_4 = ClosedLoop(explicit_ctrl_4_4, sys);
-data_explicit_4_4 = loop_explicit_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+                model, Ts, 'explicit');
 
 %%
-figure;
-Nsim = length(v_ref);
-subplot(2, 1, 1); 
-plot(1:Nsim, data_explicit_2_2.X(1:Nsim), 'b', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, data_im_2_2.X(1:Nsim), 'r', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, v_ref(1:Nsim), 'linewidth', 1.5);
-hold on
-plot(1:Nsim, sys.x.min*ones(1,Nsim), 'k--', 1:Nsim, sys.x.max*ones(1,Nsim), 'k--');
-axis([1 Nsim 0 vmax]);
-grid on
-legend('explicit', 'implicit', 'ref')
-title('state value under N_c = N_p = 2', 'FontSize', 10);
+t1 = tic;               
+% loop_im_2_2 = ClosedLoop(ctrl_2_2, sys);
+% data_im_2_2 = loop_im_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+v_ref = GenerateXRef_2_9(Ts, alpha);
+[v, u, Results_2_2] = Simulator_2_8(2, 2, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
 
-subplot(2, 1, 2); 
-stairs(1:Nsim, data_explicit_2_2.U, 'b', 'linewidth', 1.5); 
-hold on
-stairs(1:Nsim, data_im_2_2.U, 'r', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, sys.u.min*ones(1,Nsim), 'k--', 1:Nsim, sys.u.max*ones(1,Nsim), 'k--');
-axis([1 Nsim -1.3 1.3]);
-grid on
-legend('explicit', 'implicit')
-title('output value under N_c = N_p = 2', 'FontSize', 10);
+T1 = toc(t1);
+t2 = tic ;
+% loop_im_3_3 = ClosedLoop(ctrl_3_3, sys);
+% data_im_3_3 = loop_im_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+[v, u, Results_3_3] = Simulator_2_8(3, 3, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
 
-figure;
-Nsim = length(v_ref);
-subplot(2, 1, 1); 
-plot(1:Nsim, data_explicit_3_3.X(1:Nsim), 'b', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, data_im_3_3.X(1:Nsim), 'r', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, v_ref(1:Nsim), 'linewidth', 1.5);
-hold on
-plot(1:Nsim, sys.x.min*ones(1,Nsim), 'k--', 1:Nsim, sys.x.max*ones(1,Nsim), 'k--');
-axis([1 Nsim 0 vmax]);
-grid on
-legend('explicit', 'implicit', 'ref')
-title('state value under N_c = N_p = 3', 'FontSize', 10);
+T2 = toc(t2);
+t3 = tic;
+% loop_im_4_4 = ClosedLoop(ctrl_4_4, sys);
+% data_im_4_4 = loop_im_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+[v, u, Results_4_4] = Simulator_2_8(4, 4, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
+                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
 
-subplot(2, 1, 2); 
-stairs(1:Nsim, data_explicit_3_3.U, 'b', 'linewidth', 1.5); 
-hold on
-stairs(1:Nsim, data_im_3_3.U, 'r', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, sys.u.min*ones(1,Nsim), 'k--', 1:Nsim, sys.u.max*ones(1,Nsim), 'k--');
-axis([1 Nsim -1.3 1.3]);
-grid on
-legend('explicit', 'implicit')
-title('output value under N_c = N_p = 3', 'FontSize', 10);
+T3 = toc(t3);
 
-figure;
-Nsim = length(v_ref);
-subplot(2, 1, 1); 
-plot(1:Nsim, data_explicit_4_4.X(1:Nsim), 'b', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, data_im_4_4.X(1:Nsim), 'r', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, v_ref(1:Nsim), 'linewidth', 1.5);
-hold on
-plot(1:Nsim, sys.x.min*ones(1,Nsim), 'k--', 1:Nsim, sys.x.max*ones(1,Nsim), 'k--');
-axis([1 Nsim 0 vmax]);
-grid on
-legend('explicit', 'implicit', 'ref')
-title('state value under N_c = N_p = 4', 'FontSize', 10);
+%%
 
-subplot(2, 1, 2); 
-stairs(1:Nsim, data_explicit_4_4.U, 'b', 'linewidth', 1.5); 
-hold on
-stairs(1:Nsim, data_im_4_4.U, 'r', 'linewidth', 1.5); 
-hold on
-plot(1:Nsim, sys.u.min*ones(1,Nsim), 'k--', 1:Nsim, sys.u.max*ones(1,Nsim), 'k--');
-axis([1 Nsim -1.3 1.3]);
-grid on
-legend('explicit', 'implicit')
-title('output value under N_c = N_p = 4', 'FontSize', 10);
+x0 = 0.9*alpha;
+u0 = 0; 
+x_prev = x0;
+u_prev = u0;
+X = [];
+U = [];
+t4 = tic;
+for i = 1:length(v_ref)
+    
+    u = explicit_ctrl_2_2.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
+    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
+    x = temp_v(end, 2);
+    X = [X x];
+    U = [U u];
+    u_prev = u;
+    x_prev = x;
+end
+T4 = toc(t4);
+
+x0 = 0.9*alpha;
+u0 = 0; 
+x_prev = x0;
+u_prev = u0;
+X = [];
+U = [];
+t5 = tic;
+for i = 1:length(v_ref)
+    
+    u = explicit_ctrl_3_3.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
+    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
+    x = temp_v(end, 2);
+    X = [X x];
+    U = [U u];
+    u_prev = u;
+    x_prev = x;
+end
+T5 = toc(t5);
+
+x0 = 0.9*alpha;
+u0 = 0; 
+x_prev = x0;
+u_prev = u0;
+X = [];
+U = [];
+t6 = tic;
+for i = 1:length(v_ref)
+    
+    u = explicit_ctrl_4_4.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
+    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
+    x = temp_v(end, 2);
+    X = [X x];
+    U = [U u];
+    u_prev = u;
+    x_prev = x;
+end
+T6 = toc(t6);
+
+
+clear t1 t2 t3 t4 t5 t6
+
+% tic
+% loop_explicit_2_2 = ClosedLoop(explicit_ctrl_2_2, sys);
+% data_explicit_2_2 = loop_explicit_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+% toc
+% tic
+% loop_explicit_3_3 = ClosedLoop(explicit_ctrl_3_3, sys);
+% data_explicit_3_3 = loop_explicit_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+% toc 
+% tic
+% loop_explicit_4_4 = ClosedLoop(explicit_ctrl_4_4, sys);
+% data_explicit_4_4 = loop_explicit_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
+% toc
+
