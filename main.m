@@ -299,8 +299,8 @@ Nc = 4;
 [explicit_ctrl_5_4, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
                 v_0, u_0, model, Ts, v_ref, 0);
 %%
-Np = 6;
-Nc = 5;
+Np = 7;
+Nc = 4;
 
 [explicit_ctrl_9_8, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
                 v_0, u_0, model, Ts, v_ref, 0);
