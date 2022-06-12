@@ -61,7 +61,7 @@ ctrl = MPCController(sys, Np);
 
 if mode == 'implicit'
     explicit_ctrl = ctrl;    
-elseif mode == 'block'
+elseif mode == 'explicit'
     explicit_ctrl = ctrl.toExplicit();
     figure
     explicit_ctrl.partition.plot();    
