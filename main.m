@@ -269,7 +269,7 @@ xref = temp;
 clear temp
 
 [ctrl, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                v_0, u_0, model, Ts, v_ref, 1);
+                v_0, u_0, model, Ts, v_ref, 'implicit');
 %%
 
 loop_im = ClosedLoop(ctrl, sys);
@@ -300,13 +300,13 @@ Np = 5;
 Nc = 4;
 
 [explicit_ctrl_5_4, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                v_0, u_0, model, Ts, v_ref, 0);
+                v_0, u_0, model, Ts, v_ref, 'explicit');
 %%
 Np = 7;
 Nc = 4;
 
 [explicit_ctrl_9_8, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                v_0, u_0, model, Ts, v_ref, 0);
+                v_0, u_0, model, Ts, v_ref, 'explicit');
             
 %%
 
