@@ -73,75 +73,74 @@ T3 = toc(t3);
 
 %% simulation: explicit controller
 
-x0 = 0.9*alpha;
-u0 = 0; 
-x_prev = x0;
-u_prev = u0;
-X = [];
-U = [];
+% x0 = 0.9*alpha;
+% u0 = 0; 
+% x_prev = x0;
+% u_prev = u0;
+% X = [];
+% U = [];
+% t4 = tic;
+% for i = 1:length(v_ref)
+%     
+%     u = explicit_ctrl_2_2.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
+%     [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
+%     x = temp_v(end, 2);
+%     X = [X x];
+%     U = [U u];
+%     u_prev = u;
+%     x_prev = x;
+% end
+% T4 = toc(t4);
+% 
+% x0 = 0.9*alpha;
+% u0 = 0; 
+% x_prev = x0;
+% u_prev = u0;
+% X = [];
+% U = [];
+% t5 = tic;
+% for i = 1:length(v_ref)
+%     
+%     u = explicit_ctrl_3_3.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
+%     [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
+%     x = temp_v(end, 2);
+%     X = [X x];
+%     U = [U u];
+%     u_prev = u;
+%     x_prev = x;
+% end
+% T5 = toc(t5);
+% 
+% x0 = 0.9*alpha;
+% u0 = 0; 
+% x_prev = x0;
+% u_prev = u0;
+% X = [];
+% U = [];
+% t6 = tic;
+% for i = 1:length(v_ref)
+%     
+%     u = explicit_ctrl_4_4.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
+%     [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
+%     x = temp_v(end, 2);
+%     X = [X x];
+%     U = [U u];
+%     u_prev = u;
+%     x_prev = x;
+% end
+% T6 = toc(t6);
+
 t4 = tic;
-for i = 1:length(v_ref)
-    
-    u = explicit_ctrl_2_2.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
-    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
-    x = temp_v(end, 2);
-    X = [X x];
-    U = [U u];
-    u_prev = u;
-    x_prev = x;
-end
+loop_explicit_2_2 = ClosedLoop(explicit_ctrl_2_2, sys);
+data_explicit_2_2 = loop_explicit_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
 T4 = toc(t4);
-
-x0 = 0.9*alpha;
-u0 = 0; 
-x_prev = x0;
-u_prev = u0;
-X = [];
-U = [];
 t5 = tic;
-for i = 1:length(v_ref)
-    
-    u = explicit_ctrl_3_3.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
-    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
-    x = temp_v(end, 2);
-    X = [X x];
-    U = [U u];
-    u_prev = u;
-    x_prev = x;
-end
+loop_explicit_3_3 = ClosedLoop(explicit_ctrl_3_3, sys);
+data_explicit_3_3 = loop_explicit_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
 T5 = toc(t5);
-
-x0 = 0.9*alpha;
-u0 = 0; 
-x_prev = x0;
-u_prev = u0;
-X = [];
-U = [];
 t6 = tic;
-for i = 1:length(v_ref)
-    
-    u = explicit_ctrl_4_4.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
-    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
-    x = temp_v(end, 2);
-    X = [X x];
-    U = [U u];
-    u_prev = u;
-    x_prev = x;
-end
+loop_explicit_4_4 = ClosedLoop(explicit_ctrl_4_4, sys);
+data_explicit_4_4 = loop_explicit_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
 T6 = toc(t6);
 
-
 clear t1 t2 t3 t4 t5 t6
-
-% tic
-% loop_explicit_2_2 = ClosedLoop(explicit_ctrl_2_2, sys);
-% data_explicit_2_2 = loop_explicit_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-% toc
-% tic
-% loop_explicit_3_3 = ClosedLoop(explicit_ctrl_3_3, sys);
-% data_explicit_3_3 = loop_explicit_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-% toc 
-% tic
-% loop_explicit_4_4 = ClosedLoop(explicit_ctrl_4_4, sys);
-% data_explicit_4_4 = loop_explicit_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-% toc
