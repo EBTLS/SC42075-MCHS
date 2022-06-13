@@ -51,64 +51,14 @@ a_dec_max = min([a_dec_max_1, a_dec_max_2, a_dec_max_3]);
 alpha = 28.8575;
 beta = 249.8266;
 
-figure;
+Script_2_2
 
-v = [0: 0.1: vmax];
-v1 = [0: 0.1: alpha];
-v2 = [alpha: 0.1: vmax];
-plot(v, c*v.^2, 'b');
-hold on
-plot(v1, beta/alpha*v1, 'r')
-hold on
-plot(v2, ((c*vmax^2 - beta)/(vmax-alpha)*(v2 - vmax) + c*vmax^2), 'r')
-grid on
-legend('V(v)', 'P(v)');
-xlabel('v');
-ylabel('m*F_{firction}');
-title("approximation result")  
-
-clear v v1 v2 
 %% step 2.3
 
 test_t = 5;
 step_3.y0 = [0;44];
 
-% original function simulation
-[temp_t, temp_y] = ode45(@(t,y) dydt_step3(t,y,0,alpha,beta,m,gamma,b,c,vmax),...
-    [0,test_t],step_3.y0);
-step_3.original_simulation.t = temp_t;
-step_3.original_simulation.y = temp_y;
-
-% PWA function simulation
-[temp_t, temp_y] = ode45(@(t,y) dydt_step3(t,y,1,alpha,beta,m,gamma,b,c,vmax),...
-    [0,test_t],step_3.y0);
-step_3.pwa_simulation.t = temp_t;
-step_3.pwa_simulation.y = temp_y;
-
-% plot the result
-figure
-% position result
-subplot(1, 2, 1)
-plot(step_3.original_simulation.t, step_3.original_simulation.y(:,1), 'r');
-hold on
-plot(step_3.pwa_simulation.t, step_3.pwa_simulation.y(:,1), 'b');
-grid on
-legend('original function', 'pwa function')
-xlabel('t')
-ylabel('position')
-title("step 3 simulation position")
-
-% speed result
-subplot(1, 2, 2)
-plot(step_3.original_simulation.t, step_3.original_simulation.y(:,2), 'r');
-hold on
-plot(step_3.pwa_simulation.t, step_3.pwa_simulation.y(:,2), 'b');
-grid on
-legend('original function', 'pwa function')
-xlabel('t')
-ylabel('speed')
-title("step 3 simulation speed")
-
+Script_2_3
 
 
 %% step 2.4
@@ -147,13 +97,6 @@ v_ref = [10; 10];
             
             
 %% step 2.8
-% lambda = 0.1;
-% Np = 2;
-% Nc = 2;
-% x_0 = 5;
-% v_0 = [0];
-% u_0 = 0;
-% Ts = 0.15;
 T_0 = 0;
 T_end = 25;
 v_ref = 5 * ones(length(T_0: Ts: T_end), 1);
@@ -163,226 +106,9 @@ v_ref = 5 * ones(length(T_0: Ts: T_end), 1);
 
 %% step 2.9
 
-lambda = 0.1;
-Np = 5;
-Nc = 4;
-x_0 = 5;
-v_0 = 0.9*alpha;
-u_0 = 0;
-Ts = 0.15;
-T_0 = 0;
-T_end = 25;
-v_ref = GenerateXRef_2_9(Ts, alpha);
-
-[v, u, Results_varying_ref_5_4] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));
-
-lambda = 0.1;
-Np = 9;
-Nc = 8;
-x_0 = 5;
-v_0 = 0.9*alpha;
-u_0 = 0;
-Ts = 0.15;
-T_0 = 0;
-T_end = 25;
-v_ref = GenerateXRef_2_9(Ts, alpha);
-
-[v, u, Results_varying_ref_9_8] = Simulator_2_8(Np, Nc, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
-
-            
-figure
-plot(Results_varying_ref_9_8.x_history, Results_varying_ref_9_8.v_history, 'r');
-hold on;
-plot(Results_varying_ref_5_4.x_history, Results_varying_ref_5_4.v_history, 'b');
-grid on;
-legend('N_p = 9, N_c = 8', 'N_p = 5, N_c = 4');
-xlabel('x');
-ylabel('v');
-title("simulation result: trajectories of (x,v)")
-
-figure
-plot([T_0: Ts: T_end], Results_varying_ref_9_8.x_history, 'r');
-hold on;
-plot([T_0: Ts: T_end], Results_varying_ref_5_4.x_history, 'b');
-grid on;
-legend('N_p = 9, N_c = 8', 'N_p = 5, N_c = 4');
-xlabel('t');
-ylabel('x');
-title("simulation result: x")
-
-figure
-plot([T_0: Ts: T_end], Results_varying_ref_9_8.v_history, 'r');
-hold on;
-plot([T_0: Ts: T_end], Results_varying_ref_5_4.v_history, 'b');
-hold on;
-plot([T_0: Ts: T_end], v_ref);
-grid on;
-legend('N_p = 9, N_c = 8', 'N_p = 5, N_c = 4', 'v_{ref}');
-xlabel('t');
-ylabel('v');
-title("simulation result: v")
-
-            
-figure
-plot([T_0: Ts: T_end], Results_varying_ref_9_8.v_diff, 'r');
-hold on;
-plot([T_0: Ts: T_end], Results_varying_ref_5_4.v_diff, 'b');
-grid on;
-legend('N_p = 9, N_c = 8', 'N_p = 5, N_c = 4');
-xlabel('t');
-ylabel('(v - v_{ref})');
-title("simulation result: (v - v_{ref})")
-
-figure
-plot([T_0: Ts: T_end], Results_varying_ref_9_8.u_history, 'r');
-hold on;
-plot([T_0: Ts: T_end], Results_varying_ref_5_4.u_history, 'b');
-grid on;
-legend('N_p = 9, N_c = 8', 'N_p = 5, N_c = 4');
-xlabel('t');
-ylabel('u');
-title("simulation result: u")            
-figure
-plot([T_0: Ts: T_end], Results_varying_ref_9_8.u_diff, 'r');
-hold on
-plot([T_0: Ts: T_end], Results_varying_ref_5_4.u_diff, 'b');
-grid on;
-legend('N_p = 9, N_c = 8', 'N_p = 5, N_c = 4');
-xlabel('t');
-ylabel('\Delta u');
-title("simulation result: \Delta u")
+Script_2_9
 
 %% step 2.10
-x0 = 0.9*alpha;
-Np = 2;
-Nc = 2;
-v_ref = GenerateXRef_2_9(Ts, alpha)';
-Nsim = length(v_ref);
-temp = [];
-for i = 1:Nsim
-    temp = [temp, repmat(v_ref(i), 1, 1)];
-end
-xref = temp;
 
-clear temp
-
-[ctrl_2_2, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'implicit');
-[explicit_ctrl_2_2, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'explicit');
-
-Np = 3;
-Nc = 3;            
-[ctrl_3_3, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'implicit');
-[explicit_ctrl_3_3, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'explicit');
-
-Np = 4;
-Nc = 4;
-[ctrl_4_4, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'implicit');            
-[explicit_ctrl_4_4, sys] = Solution_2_10(Np, Nc, lambda, umax, umin, vmax, vmin, a_comf_max,... 
-                model, Ts, 'explicit');
-
-%%
-t1 = tic;               
-% loop_im_2_2 = ClosedLoop(ctrl_2_2, sys);
-% data_im_2_2 = loop_im_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-v_ref = GenerateXRef_2_9(Ts, alpha);
-[v, u, Results_2_2] = Simulator_2_8(2, 2, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
-
-T1 = toc(t1);
-t2 = tic ;
-% loop_im_3_3 = ClosedLoop(ctrl_3_3, sys);
-% data_im_3_3 = loop_im_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-[v, u, Results_3_3] = Simulator_2_8(3, 3, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
-
-T2 = toc(t2);
-t3 = tic;
-% loop_im_4_4 = ClosedLoop(ctrl_4_4, sys);
-% data_im_4_4 = loop_im_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-[v, u, Results_4_4] = Simulator_2_8(4, 4, lambda, [umin, umax], [vmin, vmax], a_comf_max,... 
-                x_0, v_0, u_0, v_ref, Ts, [T_0, T_end], model, @(t,y) dydt_step8(t, y, m, gamma, b, c, g));     
-
-T3 = toc(t3);
-
-%%
-
-x0 = 0.9*alpha;
-u0 = 0; 
-x_prev = x0;
-u_prev = u0;
-X = [];
-U = [];
-t4 = tic;
-for i = 1:length(v_ref)
-    
-    u = explicit_ctrl_2_2.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
-    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
-    x = temp_v(end, 2);
-    X = [X x];
-    U = [U u];
-    u_prev = u;
-    x_prev = x;
-end
-T4 = toc(t4);
-
-x0 = 0.9*alpha;
-u0 = 0; 
-x_prev = x0;
-u_prev = u0;
-X = [];
-U = [];
-t5 = tic;
-for i = 1:length(v_ref)
-    
-    u = explicit_ctrl_3_3.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
-    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
-    x = temp_v(end, 2);
-    X = [X x];
-    U = [U u];
-    u_prev = u;
-    x_prev = x;
-end
-T5 = toc(t5);
-
-x0 = 0.9*alpha;
-u0 = 0; 
-x_prev = x0;
-u_prev = u0;
-X = [];
-U = [];
-t6 = tic;
-for i = 1:length(v_ref)
-    
-    u = explicit_ctrl_4_4.evaluate(x_prev, 'x.reference', v_ref(i), 'u.previous', u_prev);
-    [temp_t, temp_v] = ode45(@(t,y) dydt_step8(t, y, m, gamma, b, c, g), [0, Ts], [10; x_prev; u]);
-    x = temp_v(end, 2);
-    X = [X x];
-    U = [U u];
-    u_prev = u;
-    x_prev = x;
-end
-T6 = toc(t6);
-
-
-clear t1 t2 t3 t4 t5 t6
-
-% tic
-% loop_explicit_2_2 = ClosedLoop(explicit_ctrl_2_2, sys);
-% data_explicit_2_2 = loop_explicit_2_2.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-% toc
-% tic
-% loop_explicit_3_3 = ClosedLoop(explicit_ctrl_3_3, sys);
-% data_explicit_3_3 = loop_explicit_3_3.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-% toc 
-% tic
-% loop_explicit_4_4 = ClosedLoop(explicit_ctrl_4_4, sys);
-% data_explicit_4_4 = loop_explicit_4_4.simulate(x0, Nsim, 'x.reference', xref, 'u.previous', u_0);
-% toc
+Script_2_10
 
